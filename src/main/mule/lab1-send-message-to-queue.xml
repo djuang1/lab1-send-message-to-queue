@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
-	xmlns:file="http://www.mulesoft.org/schema/mule/file"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp"
+	xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
 http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
-http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd">
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sftp:config name="SFTP_Config" doc:name="SFTP Config" doc:id="04b02335-4c4a-4d84-8468-e7e7bb769711" >
 		<sftp:connection host="${sftp.host}" port="${sftp.port}" username="${sftp.username}" password="${sftp.password}" />
 	</sftp:config>
@@ -16,9 +17,19 @@ http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sft
 	<flow name="lab1-send-message-to-queueFlow" doc:id="eaaae490-ba26-4673-a2e4-8abb0c68ac11" >
 		<sftp:listener doc:name="On New or Updated File" doc:id="f77ea51f-afe9-499d-a6c9-74e55cca68da" config-ref="SFTP_Config" directory="upload">
 			<scheduling-strategy >
-				<fixed-frequency frequency="30" timeUnit="SECONDS"/>
+				<fixed-frequency frequency="5" timeUnit="MINUTES"/>
 			</scheduling-strategy>
 		</sftp:listener>
-		<anypoint-mq:publish doc:name="Publish" doc:id="9d5d0776-9bf3-4c37-9dc1-adf834851ef1" config-ref="Anypoint_MQ_Config" destination="${anypoint.mq.destination}"/>
+		<ee:transform doc:name="Transform Message" doc:id="bb11872c-78ec-4b71-9ec0-7375c0efe04b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<foreach doc:name="For Each" doc:id="0a7a7ab0-9d16-404b-833f-8961c1c431a6" collection="#[payload]">
+			<anypoint-mq:publish doc:name="Publish" doc:id="9d5d0776-9bf3-4c37-9dc1-adf834851ef1" config-ref="Anypoint_MQ_Config" destination="${anypoint.mq.destination}" />
+		</foreach>
 	</flow>
 </mule>

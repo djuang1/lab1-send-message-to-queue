@@ -1,4 +1,30 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
-  <types:catalog/>
+  <types:catalog>
+    <types:type name="invoice" format="csv">
+      <types:shape format="weave" example="invoice.csv"><![CDATA[%dw 2.0
+
+type invoice = Array<{|  COMPANY: String,   VENDOR: String,   EDI_NBR: String,   INVOICE: String,   SUFFIX: String,   BATCH_NUM: String,   VOUCHER_NBR: String,   AUTH_CODE: String,   PROC_LEVEL: String,   ACCR_CODE: String,   INVOICE_TYPE: String,   OLD_VENDOR: String,   INV_CURRENCY: String,   INVOICE_DTE: String,   TAX_PNT_DATE: String,   PURCH_FR_LOC: String,   PO_NUMBER: String,   PO_RELEASE: String,   PO_CODE: String,   AUTO_MATCH: String,   DESCRIPTION: String,   BASE_INV_AMT: String,   TRAN_INV_AMT: String,   TRAN_ALOW_AMT: String,   TRAN_TXBL_AMT: String,   TRAN_TAX_AMT: String,   TRAN_DISC_AMT: String,   ORIG_CNV_RATE: String,   ANTICIPATION: String,   DISCOUNT_RT: String,   DISC_DATE: String,   DUE_DATE: String,   NBR_RECUR_PMT: String,   RECUR_FREQ: String,   REMIT_TO_CODE: String,   CASH_CODE: String,   SEP_CHK_FLAG: String,   PAY_IMM_FLAG: String,   ENCLOSURE: String,   CURR_RECALC: String,   DISC_LOST_FLG: String,   TAX_CODE: String,   INCOME_CODE: String,   HLD_CODE: String,   DIST_CODE: String,   TERM_CODE: String,   REC_STATUS: String,   POSTING_STATUS: String,   DISTRIB_DATE: String,   PAY_VENDOR: String,   TRANS_NBR: String,   BANK_INST_CODE: String,   CHECK_DATE: String,   INVOICE_GROUP: String,   ONE_TIME_VEND: String,   VENDOR_VNAME: String,   VENDOR_SNAME: String,   ADDR1: String,   ADDR2: String,   ADDR3: String,   ADDR4: String,   CITY_ADDR5: String,   STATE_PROV: String,   POSTAL_CODE: String,   COUNTY: String,   COUNTRY: String,   LEGAL_NAME: String,   VEN_INC_CODE: String,   TAX_ID: String,   JRNL_BOOK_NBR: String,   BANK_CHK_AMT: String,   BANK_ND: String,   BNK_CNV_RATE: String,   DISCOUNT_CODE: String,   INVOICE_SOURCE: String,   INVC_REF_TYPE: String,   APPROVED_FLAG: String,   INC_ACCR_CODE: String,   OPERATOR: String,   INV_USR_FLD_01: String,   INV_USR_FLD_02: String,   INV_USR_FLD_03: String,   INV_USR_FLD_04: String,   INV_USR_FLD_05: String,   HANDLING_CODE: String,   RCPT_INV_DATE: String,   RECORD_ERROR: String,   REASON_CODE: String,   CBPRINT_FL: String,   RETAIL_AMT: String,   SEGMENT_BLOCK: String,   JBK_SEQ_NBR: String,   VAT_REG_CTRY: String,   VAT_REG_NBR: String,   DIVERSE_CODE: String,   FLEX_FLAG: String,   NOTC: String,   STAT_PROC: String,   FOB_CODE: String,   SHIP_VIA: String,   UNLOADING_PORT: String,   DROPSHIP_FL: String,   TRANSPORT_MODE: String,   TAX_TYPE: String,   COUNTRY_CODE: String,   DEST_COUNTRY: String,   ORIGIN_COUNTRY: String,   FOR_ECON_CODE: String,   DISCOUNT_RT1: String,   DISCOUNT_RT2: String,   DISCOUNT_RT3: String,   BASE_DISC_AMT1: String,   BASE_DISC_AMT2: String,   BASE_DISC_AMT3: String,   TRAN_DISC_AMT1: String,   TRAN_DISC_AMT2: String,   TRAN_DISC_AMT3: String,   DISC_DATE1: String,   DISC_DATE2: String,   DISC_DATE3: String,   CARRIER_FLAG: String,   GLBL_DOC_TYPE: String,   REF_TYPE: String,   CUSTOMER_ID: String,   PMT_CAT_CODE: String,   NO_PAY_CONCERN: String,   REFERENCE_NO: String,   LTR_OF_GUARAN: String,   LETTER_OF_CR: String|}> {"isQuotedString": "false",
+"header": "true",
+"headerLineNumber": "0",
+"separator": ","}
+
+]]></types:shape>
+      <types:properties>
+        <types:property name="headerLineNumber" value="0"/>
+        <types:property name="header" value="true"/>
+        <types:property name="isQuotedString" value="false"/>
+        <types:property name="separator" value=","/>
+      </types:properties>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#bb11872c-78ec-4b71-9ec0-7375c0efe04b">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="invoice"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
 </types:mule>
