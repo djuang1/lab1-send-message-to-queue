@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd">
+	<sftp:config name="SFTP_Config" doc:name="SFTP Config" doc:id="04b02335-4c4a-4d84-8468-e7e7bb769711" >
+		<sftp:connection host="${sftp.host}" port="${sftp.port}" username="${sftp.username}" password="${sftp.password}" />
+	</sftp:config>
+	<anypoint-mq:config name="Anypoint_MQ_Config" doc:name="Anypoint MQ Config" doc:id="62737605-43d3-4ad3-b94b-562a1feb996d" >
+		<anypoint-mq:connection url="${anypoint.mq.url}" clientId="${anypoint.mq.id}" clientSecret="${anypoint.mq.secret}" />
+	</anypoint-mq:config>
+	<configuration-properties doc:name="Configuration properties" doc:id="7d89e8e9-0faf-4362-bca2-40955e0bee07" file="mule-properties.yaml" />
+	<flow name="lab1-send-message-to-queueFlow" doc:id="eaaae490-ba26-4673-a2e4-8abb0c68ac11" >
+		<sftp:listener doc:name="On New or Updated File" doc:id="f77ea51f-afe9-499d-a6c9-74e55cca68da" config-ref="SFTP_Config" directory="upload">
+			<scheduling-strategy >
+				<fixed-frequency frequency="30" timeUnit="SECONDS"/>
+			</scheduling-strategy>
+		</sftp:listener>
+		<anypoint-mq:publish doc:name="Publish" doc:id="9d5d0776-9bf3-4c37-9dc1-adf834851ef1" config-ref="Anypoint_MQ_Config" destination="${anypoint.mq.destination}"/>
+	</flow>
+</mule>

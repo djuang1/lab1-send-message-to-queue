@@ -1,0 +1,13 @@
+anypoint:
+  mq:
+    url: ""
+    id: ""
+    secret: ""
+    destination: ""
+    
+
+sftp:
+  host: "cloud-services.demos.mulesoft.com"
+  port: ""
+  username: ""
+  password: ""
